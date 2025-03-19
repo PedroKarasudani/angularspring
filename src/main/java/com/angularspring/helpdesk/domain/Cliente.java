@@ -2,10 +2,12 @@ package com.angularspring.helpdesk.domain;
 
 import com.angularspring.helpdesk.domain.enums.Perfil;
 
+import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Cliente extends Pessoa {
 
     @OneToMany(mappedBy = "cliente")
