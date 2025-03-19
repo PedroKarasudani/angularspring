@@ -1,20 +1,37 @@
 package com.angularspring.helpdesk.domain;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.angularspring.helpdesk.domain.enums.Perfil;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-public abstract class Pessoa {
-    
+import javax.persistence.*;
+
+
+@Entity
+public abstract class Pessoa implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
     protected String nome;
+
+    @Column(unique = true)
     protected String cpf;
+
+    @Column(unique = true)
     protected String email;
     protected String senha;
-    protected Set<Integer> perfils = new HashSet<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name =  "PERFIS")
+    protected Set<Integer> perfis = new HashSet<>();
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
     protected LocalDate dataCriacao = LocalDate.now();
 
     public Pessoa() {
@@ -72,11 +89,11 @@ public abstract class Pessoa {
     }
 
     public Set<Perfil> getPerfils() {
-        return perfils.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+        return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
     }
 
     public void addPerfil(Perfil perfil) {
-        this.perfils.add(perfil.getCodigo());
+        this.perfis.add(perfil.getCodigo());
     }
 
     public LocalDate getDataCriacao() {
