@@ -1,5 +1,6 @@
 package com.angularspring.helpdesk.domain.dtos;
 
+import com.angularspring.helpdesk.domain.Pessoa;
 import com.angularspring.helpdesk.domain.Tecnico;
 import com.angularspring.helpdesk.domain.enums.Perfil;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -23,6 +24,7 @@ public class TecnicoDTO implements Serializable {
 
     public TecnicoDTO() {
         super();
+        this.addPerfil(Perfil.CLIENTE);
     }
 
     public TecnicoDTO(Tecnico tecnico) {
@@ -32,7 +34,8 @@ public class TecnicoDTO implements Serializable {
         this.email = tecnico.getEmail();
         this.senha = tecnico.getSenha();
         this.perfis = tecnico.getPerfils().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
-        this.dataCriacao = tecnico.getDataCriacao();
+        this.dataCriacao = LocalDate.now();
+        this.addPerfil(Perfil.CLIENTE);
     }
 
     public LocalDate getDataCriacao() {
@@ -43,7 +46,7 @@ public class TecnicoDTO implements Serializable {
         this.dataCriacao = dataCriacao;
     }
 
-    public Set<Perfil> getPerfis() {
+    public Set<Perfil> getPerfils() {
         return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
     }
 

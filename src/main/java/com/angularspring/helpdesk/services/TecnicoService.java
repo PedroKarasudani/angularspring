@@ -1,6 +1,7 @@
 package com.angularspring.helpdesk.services;
 
 import com.angularspring.helpdesk.domain.Tecnico;
+import com.angularspring.helpdesk.domain.dtos.TecnicoDTO;
 import com.angularspring.helpdesk.domain.exceptions.ObjectNotFoundException;
 import com.angularspring.helpdesk.repositories.TecnicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +21,10 @@ public class TecnicoService {
 
     public List<Tecnico> findAll() {
         return this.repository.findAll();
+    }
+
+    public Tecnico create(TecnicoDTO objDTO) {
+        objDTO.setId(null);
+        return this.repository.save(new Tecnico(objDTO));
     }
 }
