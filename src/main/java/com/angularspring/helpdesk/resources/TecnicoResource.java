@@ -40,5 +40,4 @@ public class TecnicoResource {
                 .toUri();
         return ResponseEntity.created(uri).build();
     }
-
 }
