@@ -52,5 +52,5 @@ public class TecnicoResource {
     public ResponseEntity<TecnicoDTO> deleteById(@PathVariable Integer id) {
         this.service.deleteById(id);
         return ResponseEntity.noContent().build();
-    }git
+    }
 }
