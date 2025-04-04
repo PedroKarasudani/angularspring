@@ -42,4 +42,10 @@ public class ChamadoResource {
                 .toUri();
         return ResponseEntity.created(uri).build();
     }
+
+    @PutMapping("/{id}")
+    ResponseEntity<ChamadoDTO> update(@PathVariable Integer id, @Valid @RequestBody ChamadoDTO objDTO) {
+        Chamado obj = this.service.update(id, objDTO);
+        return ResponseEntity.ok().body(new ChamadoDTO(obj));
+    }
 }

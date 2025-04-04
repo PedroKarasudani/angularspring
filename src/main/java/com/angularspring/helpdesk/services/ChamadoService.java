@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,12 +41,22 @@ public class ChamadoService {
         return this.repository.save(newChamado(objDTO));
     }
 
+    public Chamado update(Integer id, @Valid ChamadoDTO objDTO) {
+        objDTO.setId(id);
+        Chamado oldObj = this.findById(id);
+        oldObj = newChamado(objDTO);
+        return repository.save(oldObj);
+    }
+
     private Chamado newChamado(ChamadoDTO objDTO) {
         Tecnico tecnico = this.tecnicoService.findById(objDTO.getTecnico());
         Cliente cliente = this.clienteService.findById(objDTO.getCliente());
         Chamado chamado = new Chamado();
         if(objDTO.getId() != null) {
             chamado.setId(objDTO.getId());
+        }
+        if(objDTO.getStatus().equals(2)){
+            chamado.setDataFechamento(LocalDate.now());
         }
         chamado.setTecnico(tecnico);
         chamado.setCliente(cliente);
@@ -55,4 +66,5 @@ public class ChamadoService {
         chamado.setObservacoes(objDTO.getObservacoes());
         return chamado;
     }
+
 }
