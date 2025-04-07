@@ -8,6 +8,7 @@ import com.angularspring.helpdesk.domain.exceptions.ObjectNotFoundException;
 import com.angularspring.helpdesk.repositories.PessoaRepository;
 import com.angularspring.helpdesk.repositories.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
@@ -23,6 +24,9 @@ public class ClienteService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
     public Cliente findById(Integer id) {
         return this.repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! Id: " + id));
     }
@@ -33,12 +37,14 @@ public class ClienteService {
 
     public Cliente create(ClienteDTO objDTO) {
         objDTO.setId(null);
+        objDTO.setSenha(encoder.encode(objDTO.getSenha()));
         validaPorCpfEEmail(objDTO);
         return this.repository.save(new Cliente(objDTO));
     }
 
     public Cliente update(Integer id, @Valid ClienteDTO objDTO) {
         objDTO.setId(id);
+        objDTO.setSenha(encoder.encode(objDTO.getSenha()));
         Cliente oldObj = this.findById(id);
         validaPorCpfEEmail(objDTO);
         oldObj = new Cliente(objDTO);
